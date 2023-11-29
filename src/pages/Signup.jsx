@@ -9,11 +9,13 @@ import BackgroundImage from "../components/BackgroundImage";
 import Header from "../components/Header";
 import Footer from '../Footer/Footer'
 import Developers from "../components/Developers";
+import { FaEyeSlash } from "react-icons/fa6"; 
+import { FaEye } from "react-icons/fa6";
 import { fire } from "../utils/firebase-config";
 import axios from "axios";
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  //showpassword ka varible -> to weather show the password or not
+  const [showPass, setShowPass] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -26,9 +28,9 @@ function Signup() {
   const handleSignIn = async () => {
     try {
       const {email,password} = formValues;
-      await axios.post("https://netflix-clone-alpha-plum.vercel.app/api/register",{
-        email:email,
-        password:password,
+      await axios.post("https://netflixbackend-one.vercel.app/api/register",{
+          email:email,
+          password:password,    
       })
       .then(response=>{
         console.log("regiseted successfully");
@@ -39,10 +41,6 @@ function Signup() {
       console.log(error);
     }
   }
-
-  // onAuthStateChanged(fire, (currentUser) => {
-  //   if (currentUser) navigate("/netflix");
-  // });
   
   return (
     <Container showPassword={showPassword}>
@@ -59,6 +57,7 @@ function Signup() {
             </h6>
           </div>
           <div className="form">
+            <div className="email">
             <input
               type="email"
               placeholder="Email address"
@@ -71,8 +70,9 @@ function Signup() {
               name="email"
               value={formValues.email}
             />
+            </div>
             {showPassword && (
-              <input
+                <input
                 type="password"
                 placeholder="Password"
                 onChange={(e) =>
@@ -86,14 +86,14 @@ function Signup() {
               />
             )}
             {!showPassword && (
-              <button onClick={() => setShowPassword(true)}>Get Started</button>
+              <button onClick={() => {setShowPassword(true) && setShowPass(true)}}>Get Started</button>
             )}
           </div>
           {showPassword && <button onClick={handleSignIn}>Sign Up</button>}
         </div>
       </div>
       </div>
-      <Developers/>
+      {/* <Developers/> */}
       <Footer/>
       
     </Container>
@@ -121,14 +121,27 @@ const Container = styled.div`
         text-align: center;
         font-size: 2rem;
         h1 {
+          font-size:5vw;
           padding: 0 5rem;
         }
+        h5{
+          font-size:3vw;
+        }
+        h6{
+          font-size:1.5vw;
+        }
+
       }
       .form {
         display: grid;
         grid-template-columns: ${({ showPassword }) =>
           showPassword ? "1fr 1fr" : "2fr 1fr"};
         width: 60%;
+        @media screen and (max-width:1200px){
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr 1fr;
+          row-gap: 10px;
+        }
         input {
           color: black;
           border: none;
@@ -137,6 +150,7 @@ const Container = styled.div`
           border-radius:0.2rem;
           border: 1px solid black;
           font-style: italic;
+          width:100%;  
           font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
           &:focus {
             outline: none;

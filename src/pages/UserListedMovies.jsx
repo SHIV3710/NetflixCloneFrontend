@@ -6,6 +6,7 @@ import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import axios from "axios";
+import Usermoviecard from "../components/Usermoviecard";
 // import movie from "../../../Backend/models/movie";
 
 export default function UserListedMovies() {
@@ -13,26 +14,26 @@ export default function UserListedMovies() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [email, setEmail] = useState(undefined);
-
+  const [mail, setEmail] = useState("shiva");
+  const [movies,setmovies] = useState([]);
   const currentUser = fire.currentUser;
   const uid = currentUser ? currentUser.uid : null;
   const {state} = useLocation();
-  let movies = [];
+  useEffect(()=>{
+    setEmail(state.email);
+  },[])
   
   const getmovie = async () => {
     try {
 
-      await axios.get("https://netflix-clone-alpha-plum.vercel.app/api/liked",{
-          email:state.email,
+      await axios.get("https://netflixbackend-one.vercel.app/api/liked",{
+        params:{
+          email:mail,
+        }
       }).then((res)=>{
+        console.log(res);
         const mov = res.data.movies;
-        mov.map((movie,index)=>{
-          if(movie)
-            movies.push(movie);
-        });
-        // console.log(movies);
-        // console.log(res);
+        setmovies(mov);
       })
       
     } catch (error) {
@@ -40,40 +41,45 @@ export default function UserListedMovies() {
     }
   }
   useEffect(() => {
-    setEmail(state.email);
     getmovie();
-  }, [])
+  }, [mail])
 
   // window.onscroll = () => {
   //   setIsScrolled(window.pageYOffset === 0 ? false : true);
   //   return () => (window.onscroll = null);
   // };
-  // console.log(movies);
+  console.log(movies);
   return (
     <Container>
-      <Navbar isScrolled={isScrolled} email={email} />
-      <div className="content flex column">
+      <Navbar isScrolled={isScrolled} email={mail} />
+      <div className="content">
         <h1>My List</h1>
+      </div>
         <div className="mov">
+      
         {
           movies.map((movie, index) => {
-            console.log("fff");
-            console.log(movie);
-            // return <Card movieData={movie} key={index} />;
+            console.log("gello")
+            return <Usermoviecard movieData={movie} key={index} />;
           })
           
         } 
         </div>
-      </div>
     </Container>
   );
 }
 
 const Container = styled.div`
+  display:flex;
+  flex-direction: column;
+  width:100vw;
   .content {
     margin: 2.3rem;
     margin-top: 8rem;
     gap: 3rem;
+    display: flex ;
+    flex-direction: column;
+    justify-content: center;
     h1 {
       margin-left: 3rem;
     }
@@ -81,5 +87,16 @@ const Container = styled.div`
       flex-wrap: wrap;
       gap: 1rem;
     }
+  }
+  .mov{
+    width:100vw;
+    padding:2vw;
+    height:fit-content;  
+    display: flex;
+    /* justify-content: center; */
+    /* flex-wrap: wrap; */
+    gap:2vw;
+    /* justify-contx  x ent: space-around; */
+    /* flex-direction: column; */
   }
 `;

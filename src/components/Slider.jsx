@@ -9,15 +9,15 @@ export default function Slider({ movies , email }) {
     <Container>
       <CardSlider data={getMoviesFromRange(0, 10)} email = {email} title="Trending Now" />
       
-      {/* <CardSlider data={getMoviesFromRange(10, 20)} title="New Releases" />
+      <CardSlider data={getMoviesFromRange(10, 20)} email = {email} title="New Releases" />
       
-      <CardSlider data={getMoviesFromRange(20, 30)}title="Blockbuster Movies"/>
+      <CardSlider data={getMoviesFromRange(20, 30)} email = {email}  title="Blockbuster Movies"/>
       
-      <CardSlider data={getMoviesFromRange(30, 40)} title="Popular on Netflix"/>
+      <CardSlider data={getMoviesFromRange(30, 40)} email = {email}  title="Popular on Netflix"/>
       
-      <CardSlider data={getMoviesFromRange(40, 50)} title="Action Movies" />
+      <CardSlider data={getMoviesFromRange(40, 50)} email = {email} title="Action Movies" />
      
-      <CardSlider data={getMoviesFromRange(50, 60)} title="Epics" /> */}
+      <CardSlider data={getMoviesFromRange(50, 60)} email = {email} title="Epics" />
       
     </Container>
   );

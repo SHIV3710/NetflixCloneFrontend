@@ -25,7 +25,7 @@ export default function Navbar(props) {
   
   const handlesignout = async () => {
     try {
-      await axios.get("https://netflix-clone-alpha-plum.vercel.app/api/logout").then(response=>{
+      await axios.get("https://netflixbackend-one.vercel.app/api/logout").then(response=>{
         navigate("/login");
       })
       

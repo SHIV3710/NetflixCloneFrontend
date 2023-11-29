@@ -26,7 +26,7 @@ function Login() {
   const handleLogin = async () => {
     try {
       if(email && password){
-      await axios.put("https://netflix-clone-alpha-plum.vercel.app/api/login", {
+      await axios.put("https://netflixbackend-one.vercel.app/api/login", {
         email:email,
         password:password, 
       })

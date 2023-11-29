@@ -17,20 +17,41 @@ export default function Header(props) {
   );
 }
 const StyledHeader = styled.header`
-  padding: 0 4rem;
+  width:100vw;
+  display: flex;
+  justify-content: space-between;
+  
   .logo {
+    padding: 0 2rem;
     img {
-      height: 5rem;
+      min-height:80px;
+      height: 6vw;
     }
   }
   button {
-    padding: 0.5rem 1rem;
+    margin: 0 2rem;
     background-color: #e50914;
     border: none;
+    min-height:40px;
+    min-width: 90px;
+    height:5vh;
+    width:5vw;
     cursor: pointer;
     color: white;
     border-radius: 0.2rem;
     font-weight: bolder;
     font-size: 1.05rem;
+  }
+
+
+
+  @media screen and (max-width:500px){
+    justify-content: space-around;
+    .logo{
+      padding:0;
+    }
+    button{
+      padding:0;
+    }
   }
 `;

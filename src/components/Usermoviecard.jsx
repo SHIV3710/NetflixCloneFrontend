@@ -14,7 +14,9 @@ import { useDispatch } from "react-redux";
 import { removeMovieFromLiked } from "../store";
 import { useEffect } from "react";
 
-export default React.memo(function Card({ index, movieData, isLiked = false ,email}) {
+export default function Usermoviecard({movieData,email}) {
+    console.log("hello");
+    console.log({movieData});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
@@ -26,7 +28,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
     setEmail({email});
   }, [])
   
-
+  console.log(movieData.image);
   
   const addToList = async () => {
     try {
@@ -72,62 +74,62 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
   console.log({movieData});
   return (
     <Container
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <img
-        src={`https://image.tmdb.org/t/p/w500${movieData.image}`}
-        alt="card"
-        onClick={() => navigate("/player")}
-      />
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+  >
+    <img
+      src={`https://image.tmdb.org/t/p/w500${movieData.image.url}`}
+      alt="card"
+      onClick={() => navigate("/player")}
+    />
 
-      {isHovered && (
-        <div className="hover">
-          <div className="image-video-container">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movieData.image}`}
-              alt="card"
-              onClick={() => navigate("/player",{state:{id:movieData}})}
-            />
-          </div>
-          <div className="info-container flex column">
-            <h3 className="name" onClick={() => navigate("/player",{state:{id:movieData}})}>
-              {movieData.name}
-            </h3>
-            <div className="icons flex j-between">
-              <div className="controls flex">
-                <IoPlayCircleSharp
-                  title="Play"
-                  onClick={() => navigate("/player",{state:{id:movieData}})}
+    {isHovered && (
+      <div className="hover">
+        <div className="image-video-container">
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movieData.image.url}`}
+            alt="card"
+            onClick={() => navigate("/player",{state:{id:movieData}})}
+          />
+        </div>
+        <div className="info-container flex column">
+          <h3 className="name" onClick={() => navigate("/player",{state:{id:movieData}})}>
+            {movieData.name}
+          </h3>
+          <div className="icons flex j-between">
+            <div className="controls flex">
+              <IoPlayCircleSharp
+                title="Play"
+                onClick={() => navigate("/player",{state:{id:movieData}})}
+              />
+              {like ? <AiOutlineLike title="Like" onClick={addToList}/>: <AiTwotoneLike title="Like" onClick={handlelike}/>}
+              
+              <RiThumbDownFill title="Dislike" onClick={removeFromList}/>
+              {!like ? (
+                <BsCheck
+                  title="Remove from List"
                 />
-                {like ? <AiOutlineLike title="Like" onClick={addToList}/>: <AiTwotoneLike title="Like" onClick={handlelike}/>}
-                
-                <RiThumbDownFill title="Dislike" onClick={removeFromList}/>
-                {!like ? (
-                  <BsCheck
-                    title="Remove from List"
-                  />
-                ) : (
-                  <AiOutlinePlus title="Add to my list" onClick={addToList} />
-                )}
-              </div>
-              <div className="info">
-                <AiOutlineInfoCircle onClick={()  => navigate("/info",{state:{id:movieData}})} title="More Info" />
-              </div>
+              ) : (
+                <AiOutlinePlus title="Add to my list" onClick={addToList} />
+              )}
             </div>
-            <div className="genres flex">
-              <ul className="flex">
-                {movieData.genres.map((genre) => (
-                  <li>{genre}</li>
-                ))}
-              </ul>
+            <div className="info">
+              <AiOutlineInfoCircle onClick={()  => navigate("/info",{state:{id:movieData}})} title="More Info" />
             </div>
+          </div>
+          <div className="genres flex">
+            <ul className="flex">
+              {movieData.genres.map((genre) => (
+                <li>{genre}</li>
+              ))}
+            </ul>
           </div>
         </div>
-      )}
-    </Container>
+      </div>
+    )}
+  </Container>
   );
-});
+};
 
 const Container = styled.div`
   max-width: 230px;

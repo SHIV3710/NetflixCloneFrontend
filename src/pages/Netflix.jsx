@@ -110,8 +110,12 @@ const Container = styled.div`
     position: relative;
     .background-image {
       filter: brightness(60%);
-      height: 100vh;
+      height: 75vh;
       width: 100vw;
+      @media screen and (max-width:1200px){
+        height:50vh;
+        font-size:2vh;
+      }
     }
     img {
       height: 100vh;
@@ -121,18 +125,25 @@ const Container = styled.div`
     .container {
       position: absolute;
       bottom: 5rem;
+      display: flex;
+      flex-direction: column;
+      
       .logo {
-          width: 50%;
+          width: 90%;
           height: 100%;
           margin-left: 5rem;
           font-size: 4rem;
           font-weight: bold;
+          @media screen and (max-width:1200px){
+          font-size:5vh;
+          }
       }
       .buttons {
-        margin: 5rem;
+        margin-left: 5rem;
         gap: 2rem;
+        
         button {
-          font-size: 1.4rem;
+          width:fit-content;
           gap: 1rem;
           border-radius: 0.2rem;
           padding: 0.5rem;
@@ -141,6 +152,9 @@ const Container = styled.div`
           border: none;
           cursor: pointer;
           transition: 0.2s ease-in-out;
+          /* @media screen and (max-width:1200px){
+          font-size:5vh;
+          } */
           &:hover {
             opacity: 0.8;
           }
