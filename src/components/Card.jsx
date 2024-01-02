@@ -1,17 +1,13 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoPlayCircleSharp } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai";
-import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
+import { RiThumbDownFill } from "react-icons/ri";
 import { AiOutlineInfoCircle ,AiTwotoneLike,AiOutlineLike} from "react-icons/ai";
-import {FcLike} from "react-icons/fc";
 import { BsCheck } from "react-icons/bs";
-import axios from "axios";
-import { onAuthStateChanged } from "firebase/auth";
-import { fire } from "../utils/firebase-config";
 import { useDispatch } from "react-redux";
-import { removeMovieFromLiked } from "../store";
 import { useEffect } from "react";
 
 export default React.memo(function Card({ index, movieData, isLiked = false ,email}) {
@@ -21,42 +17,35 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
   const [Email, setEmail] = useState("");
   const [like,setlike] = useState(true);
 
-
   useEffect(() => {
-    setEmail({email});
-  }, [])
-  
-
-  
+    setEmail(email);
+  }, [email])
   const addToList = async () => {
     try {
-      await axios.post("https://netflixbackend-one.vercel.app/api/add", {
-        email:email,
-        data:{
-          name:movieData.name,
-          image:movieData.image,
-          genres:movieData.genres,
-        },
+      await axios.post("https://netflix-clone-30uw.onrender.com/api/add", {
+          email:Email,  
+          data:{
+            original_title:movieData.original_title,
+            poster_path:movieData.poster_path,
+            genre_ids:movieData.genre_ids,
+          },
+        // }
       }).then((res)=>{
-        console.log(res);
         handlelike();
       })
     } catch (error) {
-      console.log(error.res.message);
+      console.log(error);
     }
   };
 
   const removeFromList = async () => {
     try {
-      await axios.put("https://netflixbackend-one.vercel.app/api/remove",{
-          email:email,
-          name:movieData.name,
-
+      await axios.put("https://netflix-clone-30uw.onrender.com/api/delete",{
+        email:Email, 
+        original_title:movieData.original_title,
       }).then((res)=>{
-        console.log(res);
         handlelike();
       })
-      
     } catch (error) {
       console.log(error);
     }
@@ -65,18 +54,13 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
   const handlelike = () =>{
       setlike(!like);
   }
-  useEffect(() => {
-    console.log(like);
-  }, [like])
-  console.log("aaaa");
-  console.log({movieData});
   return (
     <Container
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
-        src={`https://image.tmdb.org/t/p/w500${movieData.image}`}
+        src={`https://image.tmdb.org/t/p/w500/${movieData.poster_path}`}
         alt="card"
         onClick={() => navigate("/player")}
       />
@@ -85,14 +69,14 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
         <div className="hover">
           <div className="image-video-container">
             <img
-              src={`https://image.tmdb.org/t/p/w500${movieData.image}`}
+              src={`https://image.tmdb.org/t/p/w500/${movieData.poster_path}`}
               alt="card"
               onClick={() => navigate("/player",{state:{id:movieData}})}
             />
           </div>
           <div className="info-container flex column">
-            <h3 className="name" onClick={() => navigate("/player",{state:{id:movieData}})}>
-              {movieData.name}
+            <h3 className="name" style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}onClick={() => navigate("/player",{state:{id:movieData}})}>
+              {movieData.original_title}
             </h3>
             <div className="icons flex j-between">
               <div className="controls flex">
@@ -117,9 +101,9 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
             </div>
             <div className="genres flex">
               <ul className="flex">
-                {movieData.genres.map((genre) => (
+                {/* {movieData.genres.map((genre) => (
                   <li>{genre}</li>
-                ))}
+                ))} */}
               </ul>
             </div>
           </div>
@@ -130,24 +114,27 @@ export default React.memo(function Card({ index, movieData, isLiked = false ,ema
 });
 
 const Container = styled.div`
-  max-width: 230px;
-  width: 230px;
-  height: 100%;
+  max-width: 300px;
+  width: 290px;
+  height: 220px;
+  
   cursor: pointer;
   position: relative;
-  transition: width 5s, height 5s;
+  transition: width 5s, height 5s;  
   
   
   img {
     border-radius: 0.2rem;
+    object-fit: fill;
     width: 100%;
     height: 100%;
     z-index: 10;
   }
   .hover {
     z-index: 99;
-    height: max-content;
-    width: 20rem;
+    max-width: 300px;
+    width:290px;
+    height:350px;
     position: absolute;
     top: -18vh;
     left: 0;
@@ -158,16 +145,17 @@ const Container = styled.div`
     
 
     .image-video-container {
-      position: relative;
-      height: 140px;
+      /* position: relative; */
+      height: 70%;
+      width:100%;
       img {
         width: 100%;
-        height: 140px;
-        object-fit: cover;
+        height: 100%;
+        object-fit: fill;
         border-radius: 0.3rem;
         top: 0;
         z-index: 4;
-        position: absolute;
+        /* position: absolute; */
       }
       video {
         width: 100%;

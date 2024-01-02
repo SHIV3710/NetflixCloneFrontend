@@ -15,8 +15,6 @@ import { removeMovieFromLiked } from "../store";
 import { useEffect } from "react";
 
 export default function Usermoviecard({movieData,email}) {
-    console.log("hello");
-    console.log({movieData});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
@@ -28,12 +26,10 @@ export default function Usermoviecard({movieData,email}) {
     setEmail({email});
   }, [])
   
-  console.log(movieData.image);
-  
   const addToList = async () => {
     try {
-      await axios.post("https://netflixbackend-one.vercel.app/api/add", {
-        email:email,
+      await axios.post("https://netflix-clone-30uw.onrender.com/api/add", {
+          email:email,
         data:{
           name:movieData.name,
           image:movieData.image,
@@ -50,12 +46,11 @@ export default function Usermoviecard({movieData,email}) {
 
   const removeFromList = async () => {
     try {
-      await axios.put("https://netflixbackend-one.vercel.app/api/remove",{
-          email:email,
-          name:movieData.name,
+      await axios.put("https://netflix-clone-30uw.onrender.com/api//remove",{
+          params:{email:email,
+          name:movieData.name,}
 
       }).then((res)=>{
-        console.log(res);
         handlelike();
       })
       
@@ -67,11 +62,6 @@ export default function Usermoviecard({movieData,email}) {
   const handlelike = () =>{
       setlike(!like);
   }
-  useEffect(() => {
-    console.log(like);
-  }, [like])
-  console.log("aaaa");
-  console.log({movieData});
   return (
     <Container
     onMouseEnter={() => setIsHovered(true)}

@@ -1,31 +1,32 @@
-import { signOut } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
 import { fire } from "../utils/firebase-config";
 import { FaPowerOff, FaSearch } from "react-icons/fa";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setuser } from "../store";
 
 
 export default function Navbar(props) {
-  //props me 2 chize he ek to he (isScrolled) and (Email);
   const [showSearch, setShowSearch] = useState(false);
-  //search ka state
   const [inputHover, setInputHover] = useState(false);
-  //??????
+  const dispatch = useDispatch();
   const links = [
     { name: "Home", link: "/netflix" },
     { name: "TV Shows", link: "/tv" },
     { name: "Movies", link: "/movies" },
     { name: "My List", link: "/mylist" },
   ];
-
   const navigate = useNavigate();
+  useEffect(()=>{
+    dispatch(setuser(props.email));
+  },[dispatch])
   
   const handlesignout = async () => {
     try {
-      await axios.get("https://netflixbackend-one.vercel.app/api/logout").then(response=>{
+      await axios.get("https://netflix-clone-30uw.onrender.com/api/logout").then(response=>{
         navigate("/login");
       })
       

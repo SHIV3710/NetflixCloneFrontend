@@ -9,6 +9,7 @@ import { fetchMovies, getGenres } from "../store";
 import { FaPlay } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import Slider from "../components/Slider";
+import { Genres, fetchbygenre } from "../store/action";
 function Netflix() {
 
   const {state} = useLocation();
@@ -18,7 +19,6 @@ function Netflix() {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const movies = useSelector((state) => state.netflix.movies);
-  // console.log(movies);
  
   const genres = useSelector((state) => state.netflix.genres);
   
@@ -35,7 +35,7 @@ function Netflix() {
   const dispatch = useDispatch();
  
   useEffect(() => {
-    dispatch(getGenres());
+    dispatch(Genres());
   }, []);
 
 
@@ -45,7 +45,7 @@ function Netflix() {
 
   useEffect(() => {
     if (genresLoaded) {
-      dispatch(fetchMovies({ genres, type: "all" }));
+      dispatch(fetchbygenre(genres));
     }
   }, [genresLoaded]);
 
@@ -74,13 +74,13 @@ if(!mv){
       <Navbar isScrolled={isScrolled} email={useremail} />
       <div className="hero">
         <img
-          src={`https://image.tmdb.org/t/p/original/${mv.image}`}
+          src={`https://image.tmdb.org/t/p/w500/${mv.backdrop_path}`}
           alt="background"
           className="background-image"
         />
         <div className="container">
           <div className="logo">
-            {mv.name}
+            {mv.original_title}
             
           </div>
           <div className="buttons flex">
@@ -110,15 +110,16 @@ const Container = styled.div`
     position: relative;
     .background-image {
       filter: brightness(60%);
-      height: 75vh;
+      height: 100vh;
       width: 100vw;
+      /* object-fit: cover; */
       @media screen and (max-width:1200px){
         height:50vh;
         font-size:2vh;
       }
     }
     img {
-      height: 100vh;
+      height: 100svh;
       width: 100vw;
      
     }

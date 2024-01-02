@@ -10,8 +10,8 @@ import { fetchMovies, getGenres } from "../store";
 import SelectGenre from "../components/SelectGenre";
 import Slider from "../components/Slider";
 import NotAvailable from "../components/NotAvailable";
+import { Genres, fetchbygenre } from "../store/action";
 
-//ye he movies wala section
 
 function MoviePage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,19 +25,19 @@ function MoviePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getGenres());
+    dispatch(Genres());
     setEmail(state.email)
   }, []);
 
+
+  
   useEffect(() => {
     if (genresLoaded) {
-      dispatch(fetchMovies({ genres, type: "movie" }));
+      dispatch(fetchbygenre(genres));
     }
   }, [genresLoaded]);
-
+  
   const [user, setUser] = useState(undefined);
-
-
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
@@ -49,8 +49,13 @@ function MoviePage() {
         <Navbar isScrolled={isScrolled} email={email}  />
       </div>
       <div className="data">
-        <SelectGenre genres={genres} type="movie" />
-        {movies.length ? <Slider movies={movies} /> : <NotAvailable />}
+        {
+          genres && genres.genres?<>
+          <SelectGenre genres={genres.genres} type="movie" />
+          {movies.length ? <Slider movies={movies} email={email} /> : <NotAvailable />}
+          </>:<></>
+        }
+        
       </div>
     </Container>
   );

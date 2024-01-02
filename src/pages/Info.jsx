@@ -1,45 +1,49 @@
-import {React} from "react";
+import {React, useEffect, useState} from "react";
 import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate,useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function Info() {
   const navigate = useNavigate();
   const location = useLocation();
   const movie= location.state.id;
-  var x =movie.genres;
+  const {genres} = useSelector((state)=>state.netflix);
+  const [x,setx] = useState([]);
+  useEffect(() => {
+    let mov = [];
+    if (genres.genres && genres.genres.length > 0) {
+      genres.genres.forEach((item) => {
+        if(movie.genre_ids && movie.genre_ids.length > 0){
+          movie.genre_ids.forEach((gen)=>{
+            if(gen === item.id){
+              mov.push(item);
+            }
+          })
+        }
+      });
+    }
+    setx(mov);
+  }, []);
 
-  //by using useNavigate and useLocation we fetch the movie 
-  // movie jiske more info me hmne click kia
   
-  console.log(x)
-// https://api.themoviedb.org/3/movie/453395?api_key=6d75b2a2e2b05ca51b4dda2ad6426fda&append_to_response=videos
-
-
- 
   return (
     <Container>
       <div className="player">
         <div className="back">
           <BsArrowLeft onClick={() => navigate(-1)} />
-          {/* wapis main page pe */}
         </div>
-      <div className="movie">
-       <img  src={`https://image.tmdb.org/t/p/original/${movie.image}`} alt="movie Img" />
-       {/* movie ki image laga di */}
+        <div className="movie">
+       <img  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt="movie Img" />
        <div className="name">
-       Name :  {movie.name}
-       {/* yha name */}
+       Name :  {movie.original_title}
        </div>
       <div className="others">
       Genres :
-       {
-        x.map((r) => (
-          <span className="gen">{r} ,</span>
-        ))
-        //learn how we get this
-        // jin genre se wo movie match kri unke name
-     }
-    
+      { x && x.length>0?
+        x.map((item,index)=>{
+         return <span style={{fontSize:"xx-large"}}>{` ${item.name}, `}</span>
+        }):<>No genre Found</>
+      }
       </div>
       </div>
       </div>
@@ -69,6 +73,7 @@ const Container = styled.div`
         height: 60%;
         width: 60%;
         margin: 10px auto;
+        object-fit: contain;
       }
       .name{
         font-size: 4rem;
@@ -77,8 +82,8 @@ const Container = styled.div`
       .others{
         font-size: 3rem;
         font-weight: bold;
-      width: 100%;
-      text-align: center;
+        width: 100%;
+        text-align: center;
       .gen{
         margin-left: 20px;
       }

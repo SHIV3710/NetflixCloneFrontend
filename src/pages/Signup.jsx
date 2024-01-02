@@ -28,9 +28,11 @@ function Signup() {
   const handleSignIn = async () => {
     try {
       const {email,password} = formValues;
-      await axios.post("https://netflixbackend-one.vercel.app/api/register",{
+      await axios.post("https://netflix-clone-30uw.onrender.com/api/register",{
+          // bo:{
           email:email,
-          password:password,    
+          password:password, 
+        // }   
       })
       .then(response=>{
         console.log("regiseted successfully");

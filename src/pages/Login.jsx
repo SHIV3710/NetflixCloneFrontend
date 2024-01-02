@@ -13,31 +13,32 @@ function Login() {
   const [password, setPassword] = useState("");
   const [log,setlog] = useState("false");
   const navigate = useNavigate();
-
-  const handleloader = () => {
-    setTimeout(() => {
-      setlog(true);
-    }, 1);
-  }
-
-  if(log==true)
-      navigate("/netflix", { state: {email: email} });
-  
   const handleLogin = async () => {
     try {
-      if(email && password){
-      await axios.put("https://netflixbackend-one.vercel.app/api/login", {
-        email:email,
-        password:password, 
-      })
-      .then(response=>{
-        handleloader();
-      }) 
-    }
+      if (email && password) {
+        const response = await fetch("https://netflix-clone-30uw.onrender.com/api/login", {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+  
+        if (response.ok) {
+          console.log(response.json());
+          navigate("/netflix",{state:{email:email  }});
+        } else {
+          console.error(`Error: ${response.status} - ${response.statusText}`);
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  }
+  };
+  
   return (
     <>
     {log ? <Container>

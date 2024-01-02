@@ -6,30 +6,22 @@ import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import axios from "axios";
-import Usermoviecard from "../components/Usermoviecard";
-// import movie from "../../../Backend/models/movie";
 
 export default function UserListedMovies() {
-  // const movies = useSelector((state) => state.netflix.movies);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mail, setEmail] = useState("shiva");
+  const [mail, setEmail] = useState("");
   const [movies,setmovies] = useState([]);
-  const currentUser = fire.currentUser;
-  const uid = currentUser ? currentUser.uid : null;
   const {state} = useLocation();
+
   useEffect(()=>{
     setEmail(state.email);
+    getmovie(state.email);
   },[])
   
-  const getmovie = async () => {
-    try {
-
-      await axios.get("https://netflixbackend-one.vercel.app/api/liked",{
-        params:{
-          email:mail,
-        }
+  const getmovie = async (email) => {
+    try { 
+      await axios.put("https://netflix-clone-30uw.onrender.com/api/liked",{ 
+          email:email,
       }).then((res)=>{
         console.log(res);
         const mov = res.data.movies;
@@ -40,15 +32,10 @@ export default function UserListedMovies() {
       console.log(error); 
     }
   }
-  useEffect(() => {
-    getmovie();
-  }, [mail])
-
-  // window.onscroll = () => {
-  //   setIsScrolled(window.pageYOffset === 0 ? false : true);
-  //   return () => (window.onscroll = null);
-  // };
-  console.log(movies);
+  window.onscroll = () => {
+    setIsScrolled(window.pageYOffset === 0 ? false : true);
+    return () => (window.onscroll = null);
+  };
   return (
     <Container>
       <Navbar isScrolled={isScrolled} email={mail} />
@@ -59,8 +46,7 @@ export default function UserListedMovies() {
       
         {
           movies.map((movie, index) => {
-            console.log("gello")
-            return <Usermoviecard movieData={movie} key={index} />;
+            return <Card movieData={movie} key={index} />;
           })
           
         } 
@@ -80,6 +66,7 @@ const Container = styled.div`
     display: flex ;
     flex-direction: column;
     justify-content: center;
+    flex-wrap: nowrap;
     h1 {
       margin-left: 3rem;
     }
@@ -93,10 +80,7 @@ const Container = styled.div`
     padding:2vw;
     height:fit-content;  
     display: flex;
-    /* justify-content: center; */
-    /* flex-wrap: wrap; */
     gap:2vw;
-    /* justify-contx  x ent: space-around; */
-    /* flex-direction: column; */
+    flex-wrap: wrap;
   }
 `;
